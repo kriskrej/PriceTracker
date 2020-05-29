@@ -26,19 +26,9 @@ namespace lab_PriceTracker {
         public string name = "unknown";
 
         public ShopItem(HtmlNode node) {
-            var currentNode = node.SelectSingleNode("div[1]");
-            if (currentNode == null)
-                return;
-            currentNode = currentNode.SelectSingleNode("div[2]");
-            if (currentNode == null)
-                return;
-            currentNode = currentNode.SelectSingleNode("div/div/div/strong/a");
-            if (currentNode == null)
-                return;
-
+            var currentNode = node.SelectSingleNode("div[1]/div[2]/div/div/div/strong/a");
             if (currentNode != null)
                 name = currentNode.InnerText;
-                
         }
     }
 }

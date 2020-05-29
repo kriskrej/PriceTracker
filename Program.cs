@@ -3,7 +3,7 @@
 namespace lab_PriceTracker {
     class Program {
         static void Main() {
-            Console.WriteLine("Hello World!");
+            var page = new CeneoPage("https://www.ceneo.pl/Drony_i_akcesoria");
         }
     }
 }

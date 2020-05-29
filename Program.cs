@@ -1,9 +1,13 @@
 ﻿using System;
+using System.Web;
 
 namespace lab_PriceTracker {
     class Program {
         static void Main() {
-            var page = new CeneoPage("https://www.ceneo.pl/Drony_i_akcesoria");
+            Console.WriteLine("Jakiego towaru mam szukać?");
+            var query = Console.ReadLine();
+
+            var ceneoSearchResults = new CeneoSearchResults(query);
         }
     }
 }

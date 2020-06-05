@@ -7,12 +7,13 @@ using System.Net;
 namespace lab_PriceTracker {
     public class CeneoPage {
         public List<ShopItem> shopItems = new List<ShopItem>();
+        public HtmlDocument html;
         public CeneoPage(string url) {
             var web = new HtmlWeb();
-            var doc = web.Load(url);
-            var products = doc.DocumentNode.SelectNodes("/html/body/div[2]/div[3]/div[2]/div[2]/div/section/div[3]/div");
+            html = web.Load(url);
+            var products = html.DocumentNode.SelectNodes("/html/body/div[2]/div[3]/div[2]/div[2]/div/section/div[3]/div");
             if (products == null)
-                products = doc.DocumentNode.SelectNodes("/html/body/div[2]/div[3]/div[2]/div[2]/div/section/div[2]/div");
+                products = html.DocumentNode.SelectNodes("/html/body/div[2]/div[3]/div[2]/div[2]/div/section/div[2]/div");
             if (products == null)
                 Console.WriteLine("Nic nie znalazłem :(");
             else foreach (var product in products) {
@@ -20,9 +21,6 @@ namespace lab_PriceTracker {
                     if (item.name != "unknown")
                         shopItems.Add(item);
                 }
-
-            foreach (var item in shopItems)
-                Console.WriteLine($" * {item.name} - {item.price}");
         }
     }
 

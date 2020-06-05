@@ -1,29 +1,56 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Web;
 
 namespace lab_PriceTracker {
     internal class CeneoSearchResults {
-        private string query;
+        CeneoQuery query;
+        List<ShopItem> items = new List<ShopItem>(); 
 
-        public CeneoSearchResults(string query) {
+        public CeneoSearchResults(CeneoQuery query) {
             this.query = query;
-            for (int i = 0; i < 5; ++i) {
-                var page = DownloadPageNr(i);
-                if (page.shopItems.Count == 0)
-                    return;
-                //Console.ReadLine();
+            var firstPage = DownloadPageNr(0);
+            items.AddRange(firstPage.shopItems);
+            var pagesCount = GetPagesCount(firstPage);
 
+            for (int i = 1; i < pagesCount; ++i) {
+                var page = DownloadPageNr(i);
+                items.AddRange(page.shopItems);
             }
         }
 
-        private CeneoPage DownloadPageNr(int pageNr) {
-            return new CeneoPage(GetPageUrl(pageNr));
+        public string ToCsv() {
+            var csv = "";
 
+            foreach (var item in items) {
+                var name = item.name.Replace(",", "");
+                var value = item.price.Replace(",", "");
+                csv += $"{name},{value}\n";
+            }
+
+
+            return csv;
         }
 
-        private string GetPageUrl(int pageNr) {
-            var q = HttpUtility.UrlEncode(query);
-            return $"https://www.ceneo.pl/;szukaj-{q};0020-30-0-0-{pageNr}.htm";
+        private int GetPagesCount(CeneoPage firstPage) {
+            var node = firstPage.html.DocumentNode.SelectSingleNode("//div[@class=\"pagination-top\"]");
+            if (node != null) {
+                var text = node.InnerText;
+                if (!text.Contains("z "))
+                    return 1;
+                
+                text = text.Substring(text.IndexOf("z ")+2);
+                text = text.Substring(0, text.IndexOf("\n") - 1);
+                int amount = 0;
+                if (int.TryParse(text, out amount))
+                    return amount;
+            }
+            return 1;
+        }
+
+        private CeneoPage DownloadPageNr(int pageNr) {
+            return new CeneoPage(query.GetPageUrl(pageNr));
+
         }
     }
 }

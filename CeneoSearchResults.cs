@@ -19,17 +19,17 @@ namespace lab_PriceTracker {
             }
         }
 
-        public string ToCsv() {
-            var csv = "";
+        public string ToTsv() {
+            var tsv = "";
 
             foreach (var item in items) {
-                var name = item.name.Replace(",", "");
-                var value = item.price.Replace(",", "");
-                csv += $"{name},{value}\n";
+                var name = item.name.Replace("\t", " ");
+                var value = item.price.Replace("\t", " ");
+                tsv += $"{name}\t{value}\n";
             }
 
 
-            return csv;
+            return tsv;
         }
 
         private int GetPagesCount(CeneoPage firstPage) {

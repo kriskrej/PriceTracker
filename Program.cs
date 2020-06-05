@@ -13,10 +13,10 @@ namespace lab_PriceTracker {
             query.maximalPrice = ui.AskUserForInt("Za jaką cenę maksymalną?");
 
             var ceneoSearchResults = new CeneoSearchResults(query);
-            string csv = ceneoSearchResults.ToCsv();
+            string tsv = ceneoSearchResults.ToTsv();
             var date = DateTime.Now;
-            var path = $"{date.ToString("yyyy-MM-dd")} - {input}.csv";
-            File.WriteAllText(path , csv);
+            var path = $"{date.ToString("yyyy-MM-dd")} - {input}.tsv";
+            File.WriteAllText(path , tsv);
         }
     }
 }
